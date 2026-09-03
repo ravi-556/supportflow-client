@@ -1,0 +1,46 @@
+@if (loading()) {
+  <div class="state-msg">Loading ticket…</div>
+} @else if (notFound()) {
+  <div class="state-msg error">Ticket not found.</div>
+} @else if (ticket(); as t) {
+  <div class="thread-page">
+    <a routerLink="/portal/tickets" class="back-link">&larr; Back to My Tickets</a>
+
+    <div class="thread-header">
+      <span class="subject">{{ t.subject }}</span>
+      <span class="ticket-no">#{{ t.ticket_no }}</span>
+      <span class="badge status-{{ t.status }}">{{ t.status }}</span>
+    </div>
+
+    <div class="thread">
+      @for (m of messages(); track m.id) {
+        <div class="message" [class.from-agent]="m.reply_by === 'agent'">
+          <div class="msg-meta">
+            <span class="author">{{ m.reply_by === 'agent' ? (m.agent_name || 'Support') : 'You' }}</span>
+            <span class="time">{{ m.created_at | date: 'MMM d, h:mm a' }}</span>
+          </div>
+          <div class="msg-body">{{ m.description }}</div>
+        </div>
+      }
+      @if (messages().length === 0) {
+        <div class="state-msg">No messages yet.</div>
+      }
+    </div>
+
+    <div class="reply-box">
+      <textarea
+        class="reply-input"
+        rows="4"
+        placeholder="Write a reply…"
+        [ngModel]="replyBody()"
+        (ngModelChange)="replyBody.set($event)"
+      ></textarea>
+      @if (error()) {
+        <div class="error-msg">{{ error() }}</div>
+      }
+      <button class="send-btn" [disabled]="sending() || !replyBody().trim()" (click)="sendReply()">
+        {{ sending() ? 'Sending…' : 'Send' }}
+      </button>
+    </div>
+  </div>
+}

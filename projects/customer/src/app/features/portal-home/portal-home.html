@@ -1,0 +1,180 @@
+<div class="portal-page">
+  <div class="hero">
+    <h1>How can we help?</h1>
+    <div class="search-bar">
+      <input
+        type="text"
+        placeholder="Search articles…"
+        [ngModel]="searchQuery()"
+        (ngModelChange)="searchQuery.set($event); onSearchInput()"
+      />
+    </div>
+  </div>
+
+  @if (openArticleDetail(); as article) {
+    <div class="article-detail">
+      <button class="back-link" (click)="closeArticle()">&larr; Back</button>
+      <h2>{{ article.question }}</h2>
+      @if (article.category) {
+        <span class="category-tag">{{ article.category }}</span>
+      }
+      <p class="article-body">{{ article.description }}</p>
+    </div>
+  } @else {
+    @if (searchQuery().trim()) {
+      <div class="section">
+        <h2 class="section-title">Search results</h2>
+        @if (searching()) {
+          <div class="state-msg">Searching…</div>
+        } @else if (searchResults().length === 0) {
+          <div class="state-msg">No matching articles.</div>
+        } @else {
+          <div class="article-list">
+            @for (a of searchResults(); track a.id) {
+              <button class="article-row" (click)="openArticle(a.id)">
+                <span class="question">{{ a.question }}</span>
+                @if (a.category) {
+                  <span class="category-tag">{{ a.category }}</span>
+                }
+              </button>
+            }
+          </div>
+        }
+      </div>
+    } @else {
+      <div class="section">
+        <h2 class="section-title">Popular articles</h2>
+        @if (loadingPopular()) {
+          <div class="article-grid">
+            @for (i of [1, 2, 3]; track i) {
+              <div class="article-card skeleton"></div>
+            }
+          </div>
+        } @else if (popularArticles().length === 0) {
+          <div class="state-msg">No articles published yet.</div>
+        } @else {
+          <div class="article-grid">
+            @for (a of popularArticles(); track a.id) {
+              <button class="article-card" (click)="openArticle(a.id)">
+                @if (a.category) {
+                  <span class="category-tag">{{ a.category }}</span>
+                }
+                <span class="question">{{ a.question }}</span>
+              </button>
+            }
+          </div>
+        }
+      </div>
+    }
+
+    <div class="section submit-section">
+      @if (confirmation(); as t) {
+        <div class="confirmation">
+          <div class="confirmation-icon">✓</div>
+          <h2>Request submitted</h2>
+          <p>Your ticket <b>#{{ t.ticket_no }}</b> — "{{ t.subject }}" — has been created. We'll get back to you soon.</p>
+          <div class="confirmation-actions">
+            <a class="link-btn" [routerLink]="['/portal/tickets', t.id]">View ticket</a>
+            <button class="secondary-btn" (click)="submitAnother()">Submit another request</button>
+          </div>
+        </div>
+      } @else {
+        <h2 class="section-title">Submit a request</h2>
+        <form class="submit-form" (ngSubmit)="submit()">
+          <div class="field">
+            <label for="subject">Subject</label>
+            <input
+              id="subject"
+              type="text"
+              required
+              [ngModel]="subject()"
+              (ngModelChange)="subject.set($event); onSubjectInput()"
+              name="subject"
+              autocomplete="off"
+            />
+            @if (subjectSuggestions().length > 0) {
+              <div class="suggestions">
+                <div class="suggestions-label">Related articles</div>
+                @for (s of subjectSuggestions(); track s.id) {
+                  <button type="button" class="suggestion-row" (click)="openArticle(s.id)">{{ s.question }}</button>
+                }
+              </div>
+            }
+          </div>
+
+          <div class="field">
+            <label for="category">Category</label>
+            <select
+              id="category"
+              [ngModel]="ticketType()"
+              (ngModelChange)="ticketType.set($event)"
+              name="category"
+            >
+              <option [ngValue]="null">— Select —</option>
+              @for (t of ticketTypes; track t.value) {
+                <option [ngValue]="t.value">{{ t.label }}</option>
+              }
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="description">Description</label>
+            <textarea
+              id="description"
+              rows="5"
+              required
+              [ngModel]="description()"
+              (ngModelChange)="description.set($event)"
+              name="description"
+            ></textarea>
+          </div>
+
+          @if (!isSignedIn()) {
+            <div class="field">
+              <label for="guestEmail">Email</label>
+              <input
+                id="guestEmail"
+                type="email"
+                required
+                placeholder="you@example.com"
+                [ngModel]="guestEmail()"
+                (ngModelChange)="guestEmail.set($event)"
+                name="guestEmail"
+                [disabled]="guestOtpSent()"
+                autocomplete="email"
+              />
+            </div>
+
+            @if (guestOtpSent()) {
+              @if (devOtpHint()) {
+                <div class="dev-hint">DEV ONLY — no email provider wired up. Code: <b>{{ devOtpHint() }}</b></div>
+              }
+              <div class="field">
+                <label for="guestOtp">6-digit code</label>
+                <input
+                  id="guestOtp"
+                  type="text"
+                  inputmode="numeric"
+                  maxlength="6"
+                  placeholder="000000"
+                  [ngModel]="guestOtp()"
+                  (ngModelChange)="guestOtp.set($event)"
+                  name="guestOtp"
+                  autocomplete="one-time-code"
+                />
+              </div>
+            }
+          }
+
+          @if (error()) {
+            <div class="error-msg">{{ error() }}</div>
+          }
+
+          <button type="submit" class="submit-btn" [disabled]="submitting() || !canSubmit()">
+            {{ submitLabel() }}
+          </button>
+        </form>
+      }
+    </div>
+  }
+</div>

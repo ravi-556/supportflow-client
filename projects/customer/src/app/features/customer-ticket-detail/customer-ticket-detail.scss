@@ -1,0 +1,180 @@
+:host {
+  display: block;
+}
+
+.state-msg {
+  padding: 60px;
+  text-align: center;
+  color: #75758a;
+  font-size: 14px;
+
+  &.error {
+    color: #b23a2f;
+  }
+}
+
+.thread-page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 24px 24px 64px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.back-link {
+  font-size: 12.5px;
+  color: #75758a;
+  font-weight: 500;
+  text-decoration: none;
+
+  &:hover {
+    color: #5b57d1;
+  }
+}
+
+.thread-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #eeeef4;
+
+  .subject {
+    font-size: 19px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: #16161f;
+  }
+
+  .ticket-no {
+    font-size: 13px;
+    color: #8b8ba0;
+    font-weight: 500;
+  }
+}
+
+// Same palette as ticket-list.scss / ticket-detail.scss / my-tickets.scss —
+// third reuse of this exact vocabulary, per PRD §13.3.
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.status-open {
+  background: #e2ecfb;
+  color: #3560a8;
+}
+.status-pending {
+  background: #fbeeda;
+  color: #a3752f;
+}
+.status-resolved {
+  background: #e1f3e6;
+  color: #2f8552;
+}
+.status-closed {
+  background: #eeeef4;
+  color: #68687d;
+}
+
+.thread {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.message {
+  border-radius: 10px;
+  padding: 13px 15px;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: #33333f;
+  background: #fff;
+  border: 1px solid #e4e4ee;
+  align-self: flex-start;
+  max-width: 85%;
+
+  &.from-agent {
+    background: #f5f4fd;
+    border-color: #e2e0f7;
+    align-self: flex-end;
+  }
+}
+
+.msg-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+
+  .author {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #1c1c28;
+  }
+
+  .time {
+    font-size: 11.5px;
+    color: #8b8ba0;
+  }
+}
+
+.reply-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.reply-input {
+  width: 100%;
+  border: 1px solid #e0e0ea;
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 13.5px;
+  font-family: inherit;
+  resize: vertical;
+  box-sizing: border-box;
+  background: #fbfbfd;
+
+  &:focus {
+    outline: none;
+    border-color: #5b57d1;
+    background: #fff;
+  }
+}
+
+.error-msg {
+  font-size: 12.5px;
+  color: #b23a2f;
+  background: #fbe3dc;
+  border-radius: 8px;
+  padding: 8px 11px;
+}
+
+.send-btn {
+  align-self: flex-start;
+  padding: 9px 18px;
+  border-radius: 8px;
+  background: #5b57d1;
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+
+  &:hover {
+    background: #4a46c0;
+  }
+
+  &:disabled {
+    background: #c8c6ec;
+    cursor: not-allowed;
+  }
+}

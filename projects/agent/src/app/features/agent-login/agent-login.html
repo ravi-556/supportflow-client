@@ -1,0 +1,90 @@
+<div class="login-screen">
+  <div class="login-card">
+    <div class="mark">
+      <div class="mark-badge">SF</div>
+      <span class="mark-name">SupportFlow</span>
+    </div>
+
+    @if (step() === 'credentials') {
+      <div class="heading">
+        <h1>Agent sign in</h1>
+        <p>For support agents and admins only.</p>
+      </div>
+
+      <form (ngSubmit)="submitCredentials()">
+        <div class="field">
+          <label for="email">Work email</label>
+          <input
+            id="email"
+            type="email"
+            placeholder="you@supportflow.io"
+            [ngModel]="email()"
+            (ngModelChange)="email.set($event)"
+            name="email"
+            autocomplete="username"
+          />
+        </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <input
+            id="password"
+            type="password"
+            placeholder="••••••••"
+            [ngModel]="password()"
+            (ngModelChange)="password.set($event)"
+            name="password"
+            autocomplete="current-password"
+          />
+        </div>
+
+        @if (error()) {
+          <div class="error-msg">{{ error() }}</div>
+        }
+
+        <button type="submit" class="submit-btn" [disabled]="submitting()">
+          {{ submitting() ? 'Checking…' : 'Continue' }}
+        </button>
+      </form>
+
+      <a class="forgot" href="#">Forgot password?</a>
+    } @else {
+      <div class="heading">
+        <h1>Enter verification code</h1>
+        <p>We sent a 6-digit code to {{ email() }}.</p>
+      </div>
+
+      @if (devOtpHint()) {
+        <div class="dev-hint">DEV ONLY — no email provider wired up. Code: <b>{{ devOtpHint() }}</b></div>
+      }
+
+      <form (ngSubmit)="submitOtp()">
+        <div class="field">
+          <label for="otp">6-digit code</label>
+          <input
+            id="otp"
+            type="text"
+            inputmode="numeric"
+            maxlength="6"
+            placeholder="000000"
+            [ngModel]="otp()"
+            (ngModelChange)="otp.set($event)"
+            name="otp"
+            autocomplete="one-time-code"
+          />
+        </div>
+
+        @if (error()) {
+          <div class="error-msg">{{ error() }}</div>
+        }
+
+        <button type="submit" class="submit-btn" [disabled]="submitting()">
+          {{ submitting() ? 'Verifying…' : 'Verify & sign in' }}
+        </button>
+      </form>
+
+      <a class="forgot" (click)="backToCredentials()">&larr; Back</a>
+    }
+  </div>
+
+  <a class="switch-link" [href]="customerAppUrl + '/login'">Support customer? Go to the customer portal &rarr;</a>
+</div>

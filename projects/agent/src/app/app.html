@@ -1,0 +1,12 @@
+@if (auth.isAuthenticated()) {
+  <div class="topbar">
+    <div class="mark">
+      <div class="mark-badge">SF</div>
+      <span class="mark-name">SupportFlow</span>
+    </div>
+    <div class="spacer"></div>
+    <span class="role-tag">{{ auth.role() }}</span>
+    <button class="logout-btn" (click)="logout()">Log out</button>
+  </div>
+}
+<router-outlet></router-outlet>

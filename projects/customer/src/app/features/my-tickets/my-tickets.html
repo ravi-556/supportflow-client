@@ -1,0 +1,42 @@
+<div class="page">
+  <div class="page-header">
+    <h1>My Tickets</h1>
+    <a class="new-request-link" routerLink="/portal">+ New request</a>
+  </div>
+
+  <div class="filters">
+    <button class="filter-pill" [class.active]="activeTab() === 'all'" (click)="setTab('all')">All</button>
+    <button class="filter-pill" [class.active]="activeTab() === 'open'" (click)="setTab('open')">Open</button>
+    <button class="filter-pill" [class.active]="activeTab() === 'resolved'" (click)="setTab('resolved')">
+      Resolved
+    </button>
+  </div>
+
+  @if (loading()) {
+    <div class="state-msg">Loading tickets…</div>
+  } @else if (error()) {
+    <div class="state-msg error">{{ error() }}</div>
+  } @else if (tickets().length === 0) {
+    <div class="state-msg">{{ emptyMessage() }}</div>
+  } @else {
+    <div class="ticket-table">
+      <div class="ticket-row header-row">
+        <div class="col id">ID</div>
+        <div class="col subject">Subject</div>
+        <div class="col status">Status</div>
+        <div class="col updated">Updated</div>
+      </div>
+
+      @for (t of tickets(); track t.id) {
+        <a class="ticket-row" [routerLink]="['/portal/tickets', t.id]">
+          <div class="col id">#{{ t.ticket_no }}</div>
+          <div class="col subject">{{ t.subject }}</div>
+          <div class="col status">
+            <span class="badge status-{{ t.status }}">{{ t.status }}</span>
+          </div>
+          <div class="col updated">{{ relativeTime(t.updated_at) }}</div>
+        </a>
+      }
+    </div>
+  }
+</div>

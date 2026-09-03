@@ -1,0 +1,43 @@
+<div class="csat-screen">
+  @if (loading()) {
+    <div class="state-msg">Loading…</div>
+  } @else if (notFound()) {
+    <div class="state-msg error">Survey not found.</div>
+  } @else if (review(); as r) {
+    <div class="csat-card">
+      @if (r.submitted) {
+        <div class="result-icon" [class.good]="r.score === 'good'" [class.bad]="r.score === 'bad'">
+          @if (r.score === 'good') {
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" />
+            </svg>
+          } @else {
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17" />
+            </svg>
+          }
+        </div>
+        <h1>Thanks for your feedback!</h1>
+        <p class="ticket-context">#{{ r.ticket_no }} — {{ r.ticket_subject }}</p>
+        <p class="result-label">You rated this {{ r.score === 'good' ? 'Good' : 'Bad' }}.</p>
+      } @else {
+        <h1>How did we do?</h1>
+        <p class="ticket-context">#{{ r.ticket_no }} — {{ r.ticket_subject }}</p>
+        <div class="rating-buttons">
+          <button class="rate-btn good" [disabled]="submitting()" (click)="submit('good')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3" />
+            </svg>
+            <span>Good</span>
+          </button>
+          <button class="rate-btn bad" [disabled]="submitting()" (click)="submit('bad')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17" />
+            </svg>
+            <span>Bad</span>
+          </button>
+        </div>
+      }
+    </div>
+  }
+</div>

@@ -1,0 +1,154 @@
+@if (loading()) {
+  <div class="state-msg">Loading ticket…</div>
+} @else if (error()) {
+  <div class="state-msg error">{{ error() }}</div>
+} @else if (ticket(); as t) {
+  <div class="detail-page">
+    <div class="detail-header">
+      <a routerLink="/tickets" class="back-link">&larr; Back to queue</a>
+      <div class="title-row">
+        <span class="subject">{{ t.subject }}</span>
+        <span class="ticket-no">#{{ t.ticket_no }}</span>
+        <span class="badge status-{{ t.status }}">{{ t.status }}</span>
+        <span class="badge priority-{{ t.priority }}">{{ t.priority }}</span>
+      </div>
+    </div>
+
+    <div class="detail-body">
+      <div class="conversation-col">
+        <div class="thread">
+          @for (m of messages(); track m.id) {
+            <div class="message" [class.private]="m.is_private">
+              <div class="msg-meta">
+                <span class="author">{{ m.reply_by === 'agent' ? agentName(m.agent_id) : (m.reply_by === 'customer' ? t.customer_name : 'System') }}</span>
+                <span class="time">{{ m.created_at | date: 'MMM d, h:mm a' }}</span>
+                @if (m.is_private) {
+                  <span class="private-tag">Private note</span>
+                }
+              </div>
+              <div class="msg-body">{{ m.description }}</div>
+            </div>
+          }
+          @if (messages().length === 0) {
+            <div class="state-msg">No messages yet.</div>
+          }
+        </div>
+
+        <div class="reply-box">
+          <div class="reply-tabs">
+            <button class="tab" [class.active]="!replyIsPrivate()" (click)="replyIsPrivate.set(false)">Public Reply</button>
+            <button class="tab" [class.active]="replyIsPrivate()" (click)="replyIsPrivate.set(true)">Private Note</button>
+          </div>
+          <textarea
+            class="reply-input"
+            rows="4"
+            [placeholder]="replyIsPrivate() ? 'Write an internal note…' : 'Write a reply to the customer…'"
+            [ngModel]="replyBody()"
+            (ngModelChange)="replyBody.set($event)"
+          ></textarea>
+          <div class="reply-actions">
+            <select class="acting-as" [ngModel]="actingAgentId()" (ngModelChange)="actingAgentId.set($event)">
+              @for (a of agents(); track a.id) {
+                <option [value]="a.id">Acting as: {{ a.first_name }} {{ a.last_name }}</option>
+              }
+            </select>
+            <button class="send-btn" [disabled]="sending() || !replyBody().trim()" (click)="sendReply()">
+              {{ sending() ? 'Sending…' : (replyIsPrivate() ? 'Add Note' : 'Send') }}
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar">
+        <div class="panel-section">
+          <div class="field-label">Status</div>
+          <select class="select-like" [ngModel]="t.status" (ngModelChange)="setStatus($event)">
+            @for (s of statuses; track s) {
+              <option [value]="s">{{ s }}</option>
+            }
+          </select>
+        </div>
+        <div class="panel-section">
+          <div class="field-label">Priority</div>
+          <select class="select-like" [ngModel]="t.priority" (ngModelChange)="setPriority($event)">
+            @for (p of priorities; track p) {
+              <option [value]="p">{{ p }}</option>
+            }
+          </select>
+        </div>
+        <div class="panel-section">
+          <div class="field-label">Group</div>
+          <select class="select-like" [ngModel]="t.group_id" (ngModelChange)="setGroup($event)">
+            <option [value]="null">— Unassigned —</option>
+            @for (g of groups(); track g.id) {
+              <option [value]="g.id">{{ g.name }}</option>
+            }
+          </select>
+        </div>
+        <div class="panel-section">
+          <div class="field-label">Agent</div>
+          <select class="select-like" [ngModel]="t.agent_id" (ngModelChange)="setAgent($event)">
+            <option [value]="null">— Unassigned —</option>
+            @for (a of agents(); track a.id) {
+              <option [value]="a.id">{{ a.first_name }} {{ a.last_name }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="panel-section">
+          <div class="field-label">Requester</div>
+          <div class="requester-name">{{ t.customer_name }}</div>
+          <div class="requester-email">{{ t.customer_email }}</div>
+        </div>
+
+        @if (t.first_responded_at) {
+          <div class="panel-section">
+            <div class="field-label">First response</div>
+            <div class="sla-met">Met {{ t.first_responded_at | date: 'MMM d, h:mm a' }}</div>
+          </div>
+        }
+
+        @if (t.csat; as csat) {
+          <div class="panel-section">
+            <div class="field-label">CSAT</div>
+            @if (csat.submitted) {
+              <span class="badge" [class.status-resolved]="csat.score === 'good'" [class.priority-urgent]="csat.score === 'bad'">
+                {{ csat.score === 'good' ? 'Good' : 'Bad' }}
+              </span>
+            } @else {
+              <div class="csat-link-row">
+                <input class="csat-link-input" type="text" readonly [value]="csatLink(csat.review_id)" (click)="$any($event.target).select()" />
+                <button class="copy-link-btn" type="button" (click)="copyCsatLink(csat.review_id)" title="Copy link">
+                  @if (csatLinkCopied()) {
+                    <span class="copied-label">Copied</span>
+                  } @else {
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                    </svg>
+                  }
+                </button>
+              </div>
+            }
+          </div>
+        }
+
+        <div class="panel-section activity-section">
+          <div class="field-label">Activity</div>
+          <div class="activity-list">
+            @for (a of activities(); track a.id) {
+              <div class="activity-item">
+                <div class="activity-text">
+                  {{ a.action_type.replace('_', ' ') }}
+                  @if (a.status_change) { — {{ a.status_change }} }
+                  @if (a.priority_change) { — {{ a.priority_change }} }
+                </div>
+                <div class="activity-time">{{ a.created_at | date: 'MMM d, h:mm a' }}</div>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+}

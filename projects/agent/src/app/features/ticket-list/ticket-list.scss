@@ -1,0 +1,174 @@
+.page {
+  padding: 24px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  h1 {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    color: #16161f;
+    margin: 0;
+  }
+
+  .sub {
+    font-size: 13px;
+    color: #75758a;
+    margin: 2px 0 0;
+  }
+}
+
+.filters {
+  display: flex;
+  gap: 8px;
+}
+
+.filter-pill {
+  padding: 7px 14px;
+  border-radius: 8px;
+  border: 1px solid #e4e4ee;
+  background: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  color: #3a3a4a;
+  cursor: pointer;
+
+  &.active {
+    background: #ece9fc;
+    border-color: #ece9fc;
+    color: #5145b0;
+    font-weight: 700;
+  }
+}
+
+.state-msg {
+  padding: 40px;
+  text-align: center;
+  color: #75758a;
+  font-size: 14px;
+
+  &.error {
+    color: #b23a2f;
+  }
+}
+
+.ticket-table {
+  border: 1px solid #e4e4ee;
+  border-radius: 12px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.ticket-row {
+  display: grid;
+  grid-template-columns: 64px 2.4fr 1.3fr 0.9fr 0.9fr 1.2fr 1fr 1.3fr;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid #f2f2f7;
+  text-decoration: none;
+  color: inherit;
+  font-size: 13px;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &:not(.header-row):hover {
+    background: #f8f8fb;
+    cursor: pointer;
+  }
+}
+
+.header-row {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: #9393a6;
+  background: #fbfbfd;
+}
+
+.col.subject {
+  font-weight: 600;
+  color: #1c1c28;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 12px;
+}
+
+.name {
+  font-weight: 500;
+  color: #2a2a38;
+}
+
+.email {
+  font-size: 11.5px;
+  color: #8b8ba0;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.status-open {
+  background: #e2ecfb;
+  color: #3560a8;
+}
+.status-pending {
+  background: #fbeeda;
+  color: #a3752f;
+}
+.status-resolved {
+  background: #e1f3e6;
+  color: #2f8552;
+}
+.status-closed {
+  background: #eeeef4;
+  color: #68687d;
+}
+
+.priority-urgent {
+  background: #fbe3dc;
+  color: #b23a2f;
+}
+.priority-high {
+  background: #fbeadc;
+  color: #b06a2f;
+}
+.priority-medium {
+  background: #eef0f9;
+  color: #5a5a80;
+}
+.priority-low {
+  background: #eeeef4;
+  color: #68687d;
+}
+
+.sla-badge {
+  font-size: 12px;
+  font-weight: 600;
+  color: #3a8a5c;
+
+  &.overdue {
+    color: #b23a2f;
+  }
+
+  &.muted {
+    color: #8b8ba0;
+    font-weight: 500;
+  }
+}

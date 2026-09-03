@@ -1,0 +1,87 @@
+<div class="page">
+  <div class="page-header">
+    <div>
+      <h1>{{ activeFilter() === 'all' ? 'All Tickets' : activeFilter() + ' Tickets' | titlecase }}</h1>
+      <p class="sub">{{ tickets().length }} ticket{{ tickets().length === 1 ? '' : 's' }}</p>
+    </div>
+  </div>
+
+  <div class="filters">
+    <button
+      class="filter-pill"
+      [class.active]="activeFilter() === 'open'"
+      (click)="setFilter('open')"
+    >
+      Open
+    </button>
+    <button
+      class="filter-pill"
+      [class.active]="activeFilter() === 'pending'"
+      (click)="setFilter('pending')"
+    >
+      Pending
+    </button>
+    <button
+      class="filter-pill"
+      [class.active]="activeFilter() === 'resolved'"
+      (click)="setFilter('resolved')"
+    >
+      Resolved
+    </button>
+    <button class="filter-pill" [class.active]="activeFilter() === 'all'" (click)="setFilter('all')">
+      All
+    </button>
+  </div>
+
+  @if (loading()) {
+    <div class="state-msg">Loading tickets…</div>
+  } @else if (error()) {
+    <div class="state-msg error">{{ error() }}</div>
+  } @else if (tickets().length === 0) {
+    <div class="state-msg">No tickets in this view.</div>
+  } @else {
+    <div class="ticket-table">
+      <div class="ticket-row header-row">
+        <div class="col id">ID</div>
+        <div class="col subject">Subject</div>
+        <div class="col requester">Requester</div>
+        <div class="col status">Status</div>
+        <div class="col priority">Priority</div>
+        <div class="col assigned">Assigned</div>
+        <div class="col updated">Updated</div>
+        <div class="col sla">SLA</div>
+      </div>
+
+      @for (t of tickets(); track t.id) {
+        <a class="ticket-row" [routerLink]="['/tickets', t.id]">
+          <div class="col id">#{{ t.ticket_no }}</div>
+          <div class="col subject">{{ t.subject }}</div>
+          <div class="col requester">
+            <div class="name">{{ t.customer_name || '—' }}</div>
+            <div class="email">{{ t.customer_email }}</div>
+          </div>
+          <div class="col status">
+            <span class="badge status-{{ t.status }}">{{ t.status }}</span>
+          </div>
+          <div class="col priority">
+            <span class="badge priority-{{ t.priority }}">{{ t.priority }}</span>
+          </div>
+          <div class="col assigned">
+            <div class="name">{{ t.agent_name || 'Unassigned' }}</div>
+            <div class="email">{{ t.group_name }}</div>
+          </div>
+          <div class="col updated">{{ t.updated_at | date: 'MMM d, h:mm a' }}</div>
+          <div class="col sla">
+            @if (t.resolution_sla_time) {
+              <span class="sla-badge" [class.overdue]="isOverdue(t)">
+                {{ isOverdue(t) ? 'Overdue' : 'Due' }} {{ t.resolution_sla_time | date: 'MMM d, h:mm a' }}
+              </span>
+            } @else {
+              <span class="sla-badge muted">—</span>
+            }
+          </div>
+        </a>
+      }
+    </div>
+  }
+</div>
