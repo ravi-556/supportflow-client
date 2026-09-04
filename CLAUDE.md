@@ -11,6 +11,10 @@ Product/implementation specs (PRD, feature gap analysis, Zendesk/Freshdesk resea
 - New agent-facing work goes in `projects/agent`; new customer-facing work goes in `projects/customer`; a type both sides need goes in `projects/shared`.
 - A link from one app to the other (e.g. the CSAT link on the agent sidebar, or the "sign in as agent"/"go to portal" switch links) must be a real `href` built from `AGENT_APP_URL`/`CUSTOMER_APP_URL` (also in `@supportflow/shared`) — never `routerLink` and never `window.location.origin`, since that resolves to whichever app's own origin happened to render the link, not the other one.
 
+## Workflow
+
+- **Every feature is built on its own branch**, not directly on `main` — `git checkout -b feature/<name>` before starting, PRD spec in hand. Push it and open a PR on GitHub (`ravi-556/supportflow-client`) rather than merging locally. Don't merge or push to `main` without being asked.
+
 ## Dev environment
 
 ```bash

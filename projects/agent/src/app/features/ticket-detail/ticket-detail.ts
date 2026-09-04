@@ -98,6 +98,21 @@ export class TicketDetail implements OnInit {
     });
   }
 
+  // Freshdesk's real 5-point labels (PRD §13.5 revision) — same lookup as
+  // the customer CSAT page's RATING_OPTIONS; kept as a tiny local constant
+  // rather than pulled into @supportflow/shared, which only carries types.
+  private static readonly SCORE_LABELS: Record<number, string> = {
+    1: 'Poor',
+    2: 'Bad',
+    3: 'Neutral',
+    4: 'Good',
+    5: 'Very Good',
+  };
+
+  scoreLabel(score: number): string {
+    return TicketDetail.SCORE_LABELS[score] ?? String(score);
+  }
+
   agentName(id: string | null): string {
     if (!id) return 'Unassigned';
     const a = this.agents().find((x) => x.id === id);

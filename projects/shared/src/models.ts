@@ -39,7 +39,8 @@ export interface TicketListItem {
 export interface TicketCsat {
   review_id: string;
   submitted: boolean;
-  score: 'good' | 'bad' | null;
+  score: number | null;
+  comment: string | null;
 }
 
 export interface TicketDetail extends TicketListItem {
@@ -167,7 +168,8 @@ export interface CsatReview {
   id: string;
   ticket_no: number;
   ticket_subject: string;
-  score: 'good' | 'bad' | null;
+  score: number | null;
+  comment: string | null;
   submitted: boolean;
 }
 

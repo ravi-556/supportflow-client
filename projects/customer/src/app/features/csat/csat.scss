@@ -23,11 +23,11 @@
 
 .csat-card {
   width: 100%;
-  max-width: 420px;
+  max-width: 480px;
   background: #fff;
   border: 1px solid #e4e4ee;
   border-radius: 14px;
-  padding: 40px 32px;
+  padding: 36px 32px;
   box-shadow: 0 1px 2px rgba(20, 20, 40, 0.04), 0 8px 24px rgba(20, 20, 40, 0.05);
   text-align: center;
   display: flex;
@@ -47,51 +47,117 @@ h1 {
 .ticket-context {
   font-size: 13px;
   color: #75758a;
-  margin: 0 0 22px;
+  margin: 0 0 24px;
 }
 
-.rating-buttons {
+.rating-row {
   display: flex;
-  gap: 14px;
+  gap: 8px;
   width: 100%;
 }
 
-.rate-btn {
+.rating-option {
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
-  padding: 22px 12px;
+  gap: 8px;
+  padding: 14px 4px;
   border-radius: 12px;
   border: 1px solid #e4e4ee;
   background: #fbfbfd;
   cursor: pointer;
   font-family: inherit;
-  font-size: 13.5px;
-  font-weight: 700;
-  color: #3a3a4a;
 
-  svg {
-    width: 28px;
-    height: 28px;
+  .rating-circle {
+    width: 32px;
+    height: 32px;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #eeeef4;
+    color: #5a5a6e;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .rating-label {
+    font-size: 10.5px;
+    font-weight: 600;
+    color: #75758a;
+    text-align: center;
+    line-height: 1.2;
+  }
+
+  &:hover {
+    border-color: #c8c6ec;
+  }
+
+  &.selected {
+    border-color: #5b57d1;
+    background: #f5f4fd;
+
+    .rating-circle {
+      background: #5b57d1;
+      color: #fff;
+    }
+
+    .rating-label {
+      color: #5b57d1;
+    }
+  }
+}
+
+.comment-input {
+  width: 100%;
+  margin-top: 20px;
+  padding: 11px 13px;
+  border-radius: 10px;
+  border: 1px solid #e0e0ea;
+  background: #fbfbfd;
+  font-size: 13.5px;
+  font-family: inherit;
+  resize: vertical;
+  box-sizing: border-box;
+
+  &:focus {
+    outline: none;
+    border-color: #5b57d1;
+    background: #fff;
+  }
+}
+
+.error-msg {
+  width: 100%;
+  margin-top: 12px;
+  font-size: 12.5px;
+  color: #b23a2f;
+  background: #fbe3dc;
+  border-radius: 8px;
+  padding: 8px 11px;
+  box-sizing: border-box;
+}
+
+.submit-btn {
+  width: 100%;
+  margin-top: 16px;
+  padding: 11px;
+  border-radius: 8px;
+  background: #5b57d1;
+  color: white;
+  font-size: 13.5px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    background: #4a46c0;
   }
 
   &:disabled {
-    opacity: 0.5;
+    background: #c8c6ec;
     cursor: not-allowed;
-  }
-
-  &.good:hover:not(:disabled) {
-    border-color: #2f8552;
-    background: #e1f3e6;
-    color: #2f8552;
-  }
-
-  &.bad:hover:not(:disabled) {
-    border-color: #b23a2f;
-    background: #fbe3dc;
-    color: #b23a2f;
   }
 }
 
@@ -103,18 +169,20 @@ h1 {
   align-items: center;
   justify-content: center;
   margin-bottom: 8px;
+  font-size: 22px;
+  font-weight: 700;
 
-  svg {
-    width: 28px;
-    height: 28px;
-  }
-
-  &.good {
+  &.positive {
     background: #e1f3e6;
     color: #2f8552;
   }
 
-  &.bad {
+  &.neutral {
+    background: #eeeef4;
+    color: #68687d;
+  }
+
+  &.negative {
     background: #fbe3dc;
     color: #b23a2f;
   }
@@ -125,4 +193,10 @@ h1 {
   font-weight: 600;
   color: #3a3a4a;
   margin: 4px 0 0;
+}
+
+.comment-ack {
+  font-size: 12.5px;
+  color: #75758a;
+  margin: 10px 0 0;
 }
