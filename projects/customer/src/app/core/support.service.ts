@@ -30,7 +30,7 @@ export class SupportService {
     return this.http.get<CsatReview>(`${API_BASE_URL}/customer/csat/${reviewId}`);
   }
 
-  submitCsatReview(reviewId: string, score: 'good' | 'bad'): Observable<CsatReview> {
-    return this.http.post<CsatReview>(`${API_BASE_URL}/customer/csat/${reviewId}`, { score });
+  submitCsatReview(reviewId: string, score: number, comment: string): Observable<CsatReview> {
+    return this.http.post<CsatReview>(`${API_BASE_URL}/customer/csat/${reviewId}`, { score, comment });
   }
 }

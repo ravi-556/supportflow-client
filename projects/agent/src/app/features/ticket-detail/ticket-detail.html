@@ -112,9 +112,17 @@
           <div class="panel-section">
             <div class="field-label">CSAT</div>
             @if (csat.submitted) {
-              <span class="badge" [class.status-resolved]="csat.score === 'good'" [class.priority-urgent]="csat.score === 'bad'">
-                {{ csat.score === 'good' ? 'Good' : 'Bad' }}
+              <span
+                class="badge"
+                [class.status-resolved]="csat.score! >= 4"
+                [class.status-closed]="csat.score === 3"
+                [class.priority-urgent]="csat.score! <= 2"
+              >
+                {{ csat.score }}/5 — {{ scoreLabel(csat.score!) }}
               </span>
+              @if (csat.comment) {
+                <p class="csat-comment">{{ csat.comment }}</p>
+              }
             } @else {
               <div class="csat-link-row">
                 <input class="csat-link-input" type="text" readonly [value]="csatLink(csat.review_id)" (click)="$any($event.target).select()" />

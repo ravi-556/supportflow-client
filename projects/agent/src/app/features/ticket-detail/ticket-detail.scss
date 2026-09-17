@@ -308,6 +308,14 @@
   color: #2f8552;
 }
 
+// Prose, not a status — deliberately not another badge (PRD §13.5 addendum).
+.csat-comment {
+  margin: 8px 0 0;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: #4a4a5a;
+}
+
 .activity-section {
   border-bottom: none;
 }
