@@ -2,7 +2,7 @@
   <div class="page-header">
     <div>
       <h1>{{ activeFilter() === 'all' ? 'All Tickets' : activeFilter() + ' Tickets' | titlecase }}</h1>
-      <p class="sub">{{ tickets().length }} ticket{{ tickets().length === 1 ? '' : 's' }}</p>
+      <p class="sub">{{ totalCount() }} ticket{{ totalCount() === 1 ? '' : 's' }}</p>
     </div>
   </div>
 
@@ -83,5 +83,13 @@
         </a>
       }
     </div>
+
+    @if (hasMore()) {
+      <div class="load-more-row">
+        <button class="load-more" [disabled]="loadingMore()" (click)="loadMore()">
+          {{ loadingMore() ? 'Loading…' : 'Load more' }}
+        </button>
+      </div>
+    }
   }
 </div>

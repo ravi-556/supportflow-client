@@ -16,9 +16,13 @@ export class MyTickets implements OnInit {
   private customerTicketService = inject(CustomerTicketService);
 
   tickets = signal<CustomerTicketListItem[]>([]);
+  hasMore = signal(false);
   loading = signal(true);
+  loadingMore = signal(false);
   error = signal<string | null>(null);
   activeTab = signal<Tab>('all');
+
+  private page = 1;
 
   ngOnInit(): void {
     this.load();
@@ -27,16 +31,38 @@ export class MyTickets implements OnInit {
   load(): void {
     this.loading.set(true);
     this.error.set(null);
+    this.page = 1;
     const tab = this.activeTab();
     const statusGroup = tab === 'all' ? undefined : tab;
-    this.customerTicketService.list(statusGroup).subscribe({
-      next: (tickets) => {
-        this.tickets.set(tickets);
+    this.customerTicketService.list(statusGroup, this.page).subscribe({
+      next: (res) => {
+        this.tickets.set(res.results);
+        this.hasMore.set(res.next !== null);
         this.loading.set(false);
       },
       error: () => {
         this.error.set('Could not load your tickets.');
         this.loading.set(false);
+      },
+    });
+  }
+
+  loadMore(): void {
+    if (!this.hasMore() || this.loadingMore()) return;
+    this.loadingMore.set(true);
+    const tab = this.activeTab();
+    const statusGroup = tab === 'all' ? undefined : tab;
+    const nextPage = this.page + 1;
+    this.customerTicketService.list(statusGroup, nextPage).subscribe({
+      next: (res) => {
+        this.page = nextPage;
+        this.tickets.update((existing) => [...existing, ...res.results]);
+        this.hasMore.set(res.next !== null);
+        this.loadingMore.set(false);
+      },
+      error: () => {
+        this.error.set('Could not load more tickets.');
+        this.loadingMore.set(false);
       },
     });
   }

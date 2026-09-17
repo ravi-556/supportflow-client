@@ -115,6 +115,32 @@
   color: #75758a;
 }
 
+.load-more-row {
+  display: flex;
+  justify-content: center;
+  padding: 4px 0 8px;
+}
+
+.load-more {
+  padding: 8px 20px;
+  border-radius: 8px;
+  border: 1px solid #e4e4ee;
+  background: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  color: #5145b0;
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    background: #f8f8fb;
+  }
+
+  &:disabled {
+    color: #9393a6;
+    cursor: default;
+  }
+}
+
 // Same colors as ticket-list.scss / ticket-detail.scss — deliberately not
 // a shared component yet, but the palette must stay identical (PRD §13.2).
 .badge {

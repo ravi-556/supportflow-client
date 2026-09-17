@@ -11,17 +11,17 @@ import {
   GuestTicketOtpRequestResponse,
   GuestTicketSubmit,
   GuestTicketSubmitResponse,
+  PaginatedResponse,
 } from '@supportflow/shared';
 
 @Injectable({ providedIn: 'root' })
 export class CustomerTicketService {
   private http = inject(HttpClient);
 
-  list(statusGroup?: CustomerStatusGroup): Observable<CustomerTicketListItem[]> {
-    const url = statusGroup
-      ? `${API_BASE_URL}/customer/tickets?status_group=${statusGroup}`
-      : `${API_BASE_URL}/customer/tickets`;
-    return this.http.get<CustomerTicketListItem[]>(url);
+  list(statusGroup?: CustomerStatusGroup, page = 1): Observable<PaginatedResponse<CustomerTicketListItem>> {
+    const params = new URLSearchParams({ page: String(page) });
+    if (statusGroup) params.set('status_group', statusGroup);
+    return this.http.get<PaginatedResponse<CustomerTicketListItem>>(`${API_BASE_URL}/customer/tickets?${params}`);
   }
 
   create(ticket: CustomerTicketCreate): Observable<CustomerTicketListItem> {
