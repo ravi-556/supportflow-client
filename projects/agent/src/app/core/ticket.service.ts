@@ -1,15 +1,25 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { API_BASE_URL, Message, MessageCreate, TicketActivity, TicketDetail, TicketListItem, TicketUpdate } from '@supportflow/shared';
+import {
+  API_BASE_URL,
+  Message,
+  MessageCreate,
+  PaginatedResponse,
+  TicketActivity,
+  TicketDetail,
+  TicketListItem,
+  TicketUpdate,
+} from '@supportflow/shared';
 
 @Injectable({ providedIn: 'root' })
 export class TicketService {
   private http = inject(HttpClient);
 
-  list(status?: string): Observable<TicketListItem[]> {
-    const url = status ? `${API_BASE_URL}/agent/tickets?status=${status}` : `${API_BASE_URL}/agent/tickets`;
-    return this.http.get<TicketListItem[]>(url);
+  list(status?: string, page = 1): Observable<PaginatedResponse<TicketListItem>> {
+    const params = new URLSearchParams({ page: String(page) });
+    if (status) params.set('status', status);
+    return this.http.get<PaginatedResponse<TicketListItem>>(`${API_BASE_URL}/agent/tickets?${params}`);
   }
 
   get(id: string): Observable<TicketDetail> {

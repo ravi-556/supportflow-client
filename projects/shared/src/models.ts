@@ -18,6 +18,15 @@ export type ActivityActionType =
   | 'sla_resumed'
   | 'ticket_split';
 
+// Matches DRF's PageNumberPagination envelope (`?page=`) — every list
+// endpoint under /api/v1 wraps its array in this shape now.
+export interface PaginatedResponse<T> {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: T[];
+}
+
 export interface TicketListItem {
   id: string;
   ticket_no: number;

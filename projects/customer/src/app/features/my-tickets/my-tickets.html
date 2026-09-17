@@ -38,5 +38,13 @@
         </a>
       }
     </div>
+
+    @if (hasMore()) {
+      <div class="load-more-row">
+        <button class="load-more" [disabled]="loadingMore()" (click)="loadMore()">
+          {{ loadingMore() ? 'Loading…' : 'Load more' }}
+        </button>
+      </div>
+    }
   }
 </div>
